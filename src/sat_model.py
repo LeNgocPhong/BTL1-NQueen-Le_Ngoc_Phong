@@ -86,3 +86,15 @@ def decode_model_to_positions(model, board_vars, N, K):
     queens_positions.append(col)
     return queens_positions
 
+def display_board(queens_positions, N):
+    if queens_positions is None:
+        print(f"Bai toan {N}-Queens vo nghiem (UNSAT).")
+        return
+    
+    print(f"=== KẾT QUẢ BÀI TOÁN {N}-QUEENS ===")
+    print(f"Tọa độ cột từng hàng: {queens_positions}\n")
+    
+    for r in range(N):
+        row_str = " ".join("Q" if c == queens_positions[r] else "." for c in range(N))
+        print(f"Hàng {r}: {row_str}")
+    print()
