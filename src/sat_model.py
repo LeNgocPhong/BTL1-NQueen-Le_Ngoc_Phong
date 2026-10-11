@@ -1,45 +1,37 @@
 import time
+import math
 from pysat.card import CardEnc, EncType
 from pysat.solvers import Glucose3, Cadical153
 
-def solve_sat(n, solver_name="glucose3"):
-    start = time.perf_counter()
-    vars_grid = [[i * n + j + 1 for j in range(n)] for i in range(n)]
-    top_id = n * n
-    clauses = []
-
-    # Hàng & Cột: Exactly-One
-    for i in range(n):
-        cnf = CardEnc.equals(vars_grid[i], bound=1, top_id=top_id, encoding=EncType.pairwise)
-        clauses.extend(cnf.clauses)
-        top_id = cnf.nv
+def init_board_variables(N):
+    K = math.ceil(math.log2(N))
+    board_vars = []
+    var_id = 1
+    
+    for row in range(N):
+        row_bits = []
+        for bit in range(K):
+            row_bits.append(var_id)
+            var_id += 1
+        board_vars.append(row_bits)
         
-        col = [vars_grid[r][i] for r in range(n)]
-        cnf = CardEnc.equals(col, bound=1, top_id=top_id, encoding=EncType.pairwise)
-        clauses.extend(cnf.clauses)
-        top_id = cnf.nv
+    return board_vars, K
 
-    # Đường chéo: At-Most-One
-    for d in range(-(n - 1), n):
-        d1 = [vars_grid[r][r - d] for r in range(n) if 0 <= r - d < n]
-        d2 = [vars_grid[r][d - r] for r in range(n) if 0 <= d - r < n]
-        if len(d1) > 1:
-            cnf = CardEnc.atmost(d1, bound=1, top_id=top_id, encoding=EncType.pairwise)
-            clauses.extend(cnf.clauses)
-            top_id = cnf.nv
-        if len(d2) > 1:
-            cnf = CardEnc.atmost(d2, bound=1, top_id=top_id, encoding=EncType.pairwise)
-            clauses.extend(cnf.clauses)
-            top_id = cnf.nv
+def get_blocking_clause_for_value(row_vars, val, K):
+    clause = []
+    for k in range(K):
+        bit = (val >> (K - 1 - k)) & 1
+        var = row_vars[k]
 
-    SolverClass = Glucose3 if solver_name == "glucose3" else Cadical153
-    with SolverClass() as solver:
-        solver.append_formula(clauses)
-        sat = solver.solve()
-    runtime = time.perf_counter() - start
-    return sat, runtime
+        if bit == 1:
+            clause.append(-var)
+        else:
+            clause.append(var)
+    return clause
 
-if __name__ == "__main__":
-    n = 8
-    sat, runtime = solve_sat(n)
-    print(f"SAT: {sat}, Runtime: {runtime:.6f} seconds")
+def add_domain_constraints(cnf, board_vars, N, K):
+    max_val = 1 << K
+    for i in range(N):
+        for val in range(N, max_val):
+            clause = get_bloking_clause_for_value(board_vars[i], val, K)
+            cnf.append(clause)
