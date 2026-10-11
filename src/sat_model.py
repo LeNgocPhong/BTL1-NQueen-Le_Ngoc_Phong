@@ -33,5 +33,22 @@ def add_domain_constraints(cnf, board_vars, N, K):
     max_val = 1 << K
     for i in range(N):
         for val in range(N, max_val):
-            clause = get_bloking_clause_for_value(board_vars[i], val, K)
+            clause = get_blocking_clause_for_value(board_vars[i], val, K)
             cnf.append(clause)
+
+def get_blocking_pair_clause(row_i_vars, val_i, row_j_vars, val_j, K):
+    clause = []
+    for k in range(K):
+        bit_i = (val_i >> (K-1-k)) & 1
+        clause.append(-row_i_vars[k] if bit_i == 1 else row_i_vars[k])
+    for k in range(K):
+        bit_j = (val_j >> (K - 1 - k)) & 1
+        clause.append(-row_j_vars[k] if bit_j  == 1 else row_j_vars[k])
+    return clause
+
+def add_column_constraints(cnf, board_vars, N, K):
+    for i in range(N):
+        for j in range(i + 1, N):
+            for c in range(N):
+                clause = get_blocking_pair_clause(board_vars[i], c, board_vars[j], c, K)
+                cnf.append(clause)
