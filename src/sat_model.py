@@ -66,3 +66,10 @@ def add_diagonal_constraints(cnf, board_vars, N, K):
                 if c_j_left >= 0:
                     clause = get_blocking_pair_clause(board_vars[i], c_i, board_vars[j], c_j_left, K)
                     cnf.append(clause)
+
+def solve_n_queens(cnf):
+    with Glucose3(bootstrap_with=cnf) as solver:
+        if solver.solve():
+            return solver.get_model()
+    return None
+
