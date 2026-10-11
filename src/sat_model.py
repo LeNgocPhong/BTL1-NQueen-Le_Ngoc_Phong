@@ -52,3 +52,17 @@ def add_column_constraints(cnf, board_vars, N, K):
             for c in range(N):
                 clause = get_blocking_pair_clause(board_vars[i], c, board_vars[j], c, K)
                 cnf.append(clause)
+
+def add_diagonal_constraints(cnf, board_vars, N, K):
+    for i in range(N):
+        for j in range(i + 1, N):
+            delta = j-i
+            for c_i in range(N):
+                c_j_right = c_i + delta
+                if c_j_right < N:
+                    clause = get_blocking_pair_clause(board_vars[i], c_i, board_vars[j], c_j_right, K)
+                    cnf.append(clause)
+                c_j_left = c_i - delta
+                if c_j_left >= 0:
+                    clause = get_blocking_pair_clause(board_vars[i], c_i, board_vars[j], c_j_left, K)
+                    cnf.append(clause)
