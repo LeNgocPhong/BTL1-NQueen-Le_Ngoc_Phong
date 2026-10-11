@@ -116,12 +116,12 @@ def solve_n_queens(N):
     queens_positions = decode_model_to_positions(model, board_vars, N, K)
     
     end_time = time.time()
-    elapsed_time = end_time - start_time
-    
-    # 4. Hiển thị kết quả
-    display_board(queens_positions, N)
-    print(f"Thời gian giải bài toán {N}-Queens: {elapsed_time:.6f} giây\n")
+    runtime = end_time - start_time
+
+    return queens_positions, runtime
 
 if __name__ == "__main__":
     N = 8
-    solve_n_queens(N)
+    queens_positions, runtime = solve_n_queens(N)
+    display_board(queens_positions, N)
+    print(f"Thời gian giải bài toán {N}-Queens: {runtime:.6f} giây\n")
