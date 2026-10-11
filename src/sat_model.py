@@ -73,3 +73,16 @@ def solve_n_queens(cnf):
             return solver.get_model()
     return None
 
+def decode_model_to_positions(model, board_vars, N, K):
+    if model is None:
+        return None
+    model_set = set(model)
+    queens_positions = []
+    for r in range(N):
+        col = 0
+        for k in range(K):
+            if board_vars[r][k] in model_set:
+                col |= (1 << (K - 1 - k))
+    queens_positions.append(col)
+    return queens_positions
+
