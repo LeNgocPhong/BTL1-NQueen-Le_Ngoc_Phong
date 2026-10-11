@@ -1,7 +1,7 @@
 import time
 import math
-from pysat.card import CardEnc, EncType
-from pysat.solvers import Glucose3, Cadical153
+from pysat.formula import CNF
+from pysat.solvers import Glucose3
 
 def init_board_variables(N):
     K = math.ceil(math.log2(N))
@@ -67,7 +67,7 @@ def add_diagonal_constraints(cnf, board_vars, N, K):
                     clause = get_blocking_pair_clause(board_vars[i], c_i, board_vars[j], c_j_left, K)
                     cnf.append(clause)
 
-def solve_n_queens(cnf):
+def solve_with_glucose3(cnf):
     with Glucose3(bootstrap_with=cnf) as solver:
         if solver.solve():
             return solver.get_model()
@@ -83,7 +83,7 @@ def decode_model_to_positions(model, board_vars, N, K):
         for k in range(K):
             if board_vars[r][k] in model_set:
                 col |= (1 << (K - 1 - k))
-    queens_positions.append(col)
+        queens_positions.append(col)
     return queens_positions
 
 def display_board(queens_positions, N):
@@ -98,3 +98,30 @@ def display_board(queens_positions, N):
         row_str = " ".join("Q" if c == queens_positions[r] else "." for c in range(N))
         print(f"Hàng {r}: {row_str}")
     print()
+
+def solve_n_queens(N):
+    start_time = time.time()
+    
+    # 1. Khởi tạo biến
+    board_vars, K = init_board_variables(N)
+    cnf = CNF()
+    
+    # 2. Xây dựng các ràng buộc CNF
+    add_domain_constraints(cnf, board_vars, N, K)
+    add_column_constraints(cnf, board_vars, N, K)
+    add_diagonal_constraints(cnf, board_vars, N, K)
+    
+    # 3. Giải và giải mã nghiệm
+    model = solve_with_glucose3(cnf)
+    queens_positions = decode_model_to_positions(model, board_vars, N, K)
+    
+    end_time = time.time()
+    elapsed_time = end_time - start_time
+    
+    # 4. Hiển thị kết quả
+    display_board(queens_positions, N)
+    print(f"Thời gian giải bài toán {N}-Queens: {elapsed_time:.6f} giây\n")
+
+if __name__ == "__main__":
+    N = 8
+    solve_n_queens(N)
