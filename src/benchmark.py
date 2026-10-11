@@ -5,7 +5,7 @@ from sat_model import solve_n_queens
 from cp_model import solve_cp_sat
 from ilp_model import solve_ilp_gurobi
 
-def benchmark_models(test_cases, output_csv="benchmark_comparison.csv", chart_file="benchmark_chart.png"):
+def benchmark_models(test_cases, output_csv="BTL1-NQueen-Le_Ngoc_Phong\\results\\benchmark_comparison.csv", chart_file="BTL1-NQueen-Le_Ngoc_Phong\\results\\benchmark_chart.png"):
     # Danh sách các solver cần so sánh: (Tên hiển thị, Hàm thực thi)
     solvers = [
         ("SAT (PySAT)", solve_n_queens),
