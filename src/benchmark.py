@@ -89,6 +89,6 @@ def plot_comparison(results, solvers, chart_file):
 
 
 if __name__ == "__main__":
-    test_cases = [4, 6, 8, 10, 12, 14, 16, 20]
+    test_cases = [2, 3, 4, 6, 8, 10, 12, 14, 16, 20, 24, 28, 32]
     
     benchmark_models(test_cases)
