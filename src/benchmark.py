@@ -4,11 +4,13 @@ import matplotlib.pyplot as plt
 from sat_model import solve_n_queens
 from cp_model import solve_cp_sat
 from ilp_model import solve_ilp_gurobi
+from example_sat_model import solve_nqueens_binary_encoding as solve_n_queens_example
 
 def benchmark_models(test_cases, output_csv="BTL1-NQueen-Le_Ngoc_Phong\\results\\benchmark_comparison.csv", chart_file="BTL1-NQueen-Le_Ngoc_Phong\\results\\benchmark_chart.png"):
     # Danh sách các solver cần so sánh: (Tên hiển thị, Hàm thực thi)
     solvers = [
         ("SAT (PySAT)", solve_n_queens),
+        ("SAT (Example)", solve_n_queens_example),
         ("CP-SAT (OR-Tools)", solve_cp_sat),
         ("ILP (Gurobi)", solve_ilp_gurobi)
     ]
@@ -80,6 +82,9 @@ def plot_comparison(results, solvers, chart_file):
 
     plt.xlabel("Kích thước bàn cờ (N)", fontsize=12)
     plt.ylabel("Thời gian chạy (giây)", fontsize=12)
+
+    plt.xticks(n_values)
+
     plt.title("So sánh thời gian chạy giải bài toán N-Queens", fontsize=14)
     plt.grid(True, linestyle="--", alpha=0.6)
     plt.legend(fontsize=11)
@@ -89,6 +94,6 @@ def plot_comparison(results, solvers, chart_file):
 
 
 if __name__ == "__main__":
-    test_cases = [2, 3, 4, 6, 8, 10, 12, 14, 16, 20, 24, 28, 32]
+    test_cases = [2, 3, 4, 6, 8, 10, 12, 14, 16, 20, 24, 28, 32, 36]
     
     benchmark_models(test_cases)
