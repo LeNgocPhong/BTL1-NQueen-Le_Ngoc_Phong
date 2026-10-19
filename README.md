@@ -9,14 +9,14 @@ Dự án giải bài toán $N$-Queens tập trung vào mô hình hóa **SAT vớ
 ```text
 BTL1-NQueen/
 ├── src/
-│   ├── sat_model.py       # [Trọng tâm] Mã hóa CNF nhị phân & giải bằng PySAT
-│   ├── cp_model.py        # [Baseline] Mô hình CP-SAT (OR-Tools)
-│   ├── ilp_model.py       # [Baseline] Mô hình ILP (Gurobi)
-│   └── benchmark.py       # Tự động so sánh thời gian, xuất CSV & biểu đồ
+│   ├── sat_model.py               # [Trọng tâm] Mã hóa CNF nhị phân & giải bằng PySAT (tự xây dựng)
+│   ├── example_sat_model.py       # [Trọng tâm] Mã hóa CNF nhị phân & giải bằng PySAT (code mẫu)
+│   ├── cp_model.py                # [Baseline] Mô hình CP-SAT (OR-Tools) (code mẫu)
+│   ├── ilp_model.py               # [Baseline] Mô hình ILP (Gurobi) (code mẫu)
+│   └── benchmark.py               # Tự động so sánh thời gian, xuất CSV & biểu đồ
 ├── results/
 │   ├── benchmark_comparison.csv
 │   └── benchmark_chart.png
-├── requirements.txt
 └── README.md
 
 ```

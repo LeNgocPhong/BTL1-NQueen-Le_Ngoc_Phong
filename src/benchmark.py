@@ -9,8 +9,8 @@ from example_sat_model import solve_nqueens_binary_encoding as solve_n_queens_ex
 def benchmark_models(test_cases, output_csv="BTL1-NQueen-Le_Ngoc_Phong\\results\\benchmark_comparison.csv", chart_file="BTL1-NQueen-Le_Ngoc_Phong\\results\\benchmark_chart.png"):
     # Danh sách các solver cần so sánh: (Tên hiển thị, Hàm thực thi)
     solvers = [
-        ("SAT (PySAT)", solve_n_queens),
-        ("SAT (Example)", solve_n_queens_example),
+        ("SAT (Binary encoding[tự code])", solve_n_queens),
+        ("SAT (Binary encoding[code mẫu])", solve_n_queens_example),
         ("CP-SAT (OR-Tools)", solve_cp_sat),
         ("ILP (Gurobi)", solve_ilp_gurobi)
     ]
